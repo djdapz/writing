@@ -1,5 +1,33 @@
+# Goals of this post
+1) Make this **interesting** for technical people
+1) Make this **acessible** for non-technical people  
+    - Communicate difference between source code and an article
+1) Communicate value of only building once
+    - derisk deployments
+    - speed up pipeline
+    - provide confidence
+1) Explain the idea of Artifact Promotion, why it's valuable, and why bulding once allows us to achieve it
+
+
+
+
 # Iteration 2 -> Themes
 
+### Artifact vs Source Code
+    - Analogies
+        - Cake vs Recipe -> Deployment analogy kinda falls apart
+            - Environment can fuck you up
+                - altitude
+            - dependcies can fuck you up
+                - type or granularity of flour
+                
+        - Legos vs build model
+            - you don't twant to assemble the lego stucure each time
+            - people loose pieces
+            - people can assemble it wrong
+            - stuff goes wrong
+            - build the lego set once, make sure it looks good, then treat that as your product
+            
 ### Builds don't always go as expected. You want to deploy the artifact that you vetted.
 
     - If you build twice...
@@ -21,23 +49,6 @@
                     - Cant "shift left"
                 -  dependenceis go away!!!! [Left Pad](https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/)
         
-
-
-### Artifact vs Source Code
-    - Analogies
-        - Cake vs Recipe -> Deployment analogy kinda falls apart
-            - Environment can fuck you up
-                - altitude
-            - dependcies can fuck you up
-                - type or granularity of flour
-                
-        - Legos vs build model
-            - you don't twant to assemble the lego stucure each time
-            - people loose pieces
-            - people can assemble it wrong
-            - stuff goes wrong
-            - build the lego set once, make sure it looks good, then treat that as your product
-            
 ### Artifact promotion
 
     - Confidence in deployment from each environment
