@@ -1,10 +1,4 @@
-### outline
-
-
-
-
-
-## Themes
+# Iteration 2 -> Themes
 
 ### Builds don't always go as expected. You want to deploy the artifact that you vetted.
 
@@ -77,7 +71,7 @@
         - by having one application, you have to configure using the runtime environment, not by different builds
         - app is portable
         
-##Risks and Benefits
+# Iteration 1 -> Risks and Benefits
 
 ### risks of NOT doing this
     - Random errors in build
