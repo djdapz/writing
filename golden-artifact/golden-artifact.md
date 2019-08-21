@@ -30,7 +30,7 @@ For modern frontend JavaScript projects, it's a common practice to build the cod
  - It's even better if we can remove un-necessary code. Many build tools preform [tree shaking](https://medium.com/@netxm/what-is-tree-shaking-de7c6be5cadd) to eliminate code from dependencies that our app doesn't actually use. The fewer lines of code we ship, the quicker the page will load. 
  - We use can automated tooling to make sure it's compatible across browsers. 
  - We can even make the code as sort as possible by renaming variables from things like `userPreferences` to `a`.
- - The build process can include a [transpliation](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) step. This enables us to use other languages like TypeScript, CoffeScript, Elm, Jsx, and still produce a JavaScript app for the web.
+ - The build process can include a [transpliation](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) step. This enables us to use other languages like TypeScript, CoffeScript, Elm, Jsx, and still produce a JavaScript app that browsers can understand.
    
 
 In a compiled language(Java, C++, Go ect.), the code is compiled into machine code. 
