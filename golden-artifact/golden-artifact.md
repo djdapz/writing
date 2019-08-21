@@ -1,9 +1,9 @@
 # Goals of this post
 1) Make this **interesting** for technical people
-1) Make this **acessible** for non-technical people  
+1) Make this **accessible** for non-technical people  
     - Communicate difference between source code and an article
 1) Communicate value of only building once
-    - derisk deployments
+    - de-risk deployments
     - speed up pipeline
     - provide confidence
 1) Explain the idea of Artifact Promotion, why it's valuable, and why bulding once allows us to achieve it
@@ -11,115 +11,140 @@
 
 # Iteration 3 -> Attempt to actually write (LOL)
 
--- Should i make it clear that I'm talking about APP Dev teams or does it not really matter?
-
 ### What's an artifact? Why should I care?
 
 
-When engineers want to deploy their code, they need to build it into an artifact. 
-The code is not something that we can just run or deploy, there's a middle step that we need to go through.
+When a team deploys their code, they need to build it into an artifact first. 
+The source code that teams write is not something that we can just run or deploy.
  
 Almost all software project have a **build** process step where we do two main things.
-1) We gather all of the third party code that our code relies on. This is stuff like React, the Spring Framework, or Django.
-2) We convert all of the code we need from the **human-readable** code that we write and maintain, and convert it into **machine-readable** code that will actually run on a comptuter.
-    - Many compilers or build tools will have optimiztaion steps built in to make your code as efficient as possible.
-    - In a compliled lanaguage(Java, C++, Go ect.), the code is converted into machine code. In the case of Java, we crate Java Bytecode. 
-    Machines cannot actually exceute cdoe, they need a very detailed set of instructions. The compilation process allows us to work in an easily maintainable language that is close to what we know and understand. 
-    
-    Here's an example of Some Java Sourcecode... [source](https://en.wikibooks.org/wiki/Java_Programming/Byte_Code)
-    ```
-     for (int i = 2; i < 1000; i++) {
-      for (int j = 2; j < i; j++) {
-        if (i % j == 0)
-          continue outer;
-      }
-      System.out.println (i);
-     }
-     
-     ```
-     ...and it's respective Java ByteCode
-     ```
-      0:   iconst_2
-      1:   istore_1
-      2:   iload_1
-      3:   sipush  1000
-      6:   if_icmpge       44
-      9:   iconst_2
-      10:  istore_2
-      11:  iload_2
-      12:  iload_1
-      13:  if_icmpge       31
-      16:  iload_1
-      17:  iload_2
-      18:  irem             # remainder
-      19:  ifne    25
-      22:  goto    38
-      25:  iinc    2, 1
-      28:  goto    11
-      31:  getstatic       #84; //Field java/lang/System.out:Ljava/io/PrintStream;
-      34:  iload_1
-      35:  invokevirtual   #85; //Method java/io/PrintStream.println:(I)V
-      38:  iinc    1, 1
-      41:  goto    2
-      44:  return   
-    ```
 
-After these steps we have crated an **artifact** that we can run or deploy. 
-In the JS wep-app world, we'd have a bundle.js, in Java we'd have .jar file, for C we could have something like a .exe. 
-All of these are **artifacts** that we can run.
+##### Gather Dependencies
+We gather all of the dependencies that our code relies on (other code that our code uses). These are often libraries React, the Spring Framework, or Django. Note that these dependencies almost always have dependencies of their own, we gather those as well.
+##### Build the Artifact
+
+We convert all of the code we need from the **human-readable** code that we write and maintain, and convert it into **machine-readable** code that will actually run on a comptuter. Many compilers or build tools will also have optimiztaion steps built in to make your code as efficient as possible.
+
+For modern frontend JavaScript projects, it's a common practice to build the code into a single file called `bundle.js`, or a series of a few bundle files. Even though the browser can technically interpret our source (sometimes), we get many advantages from the build step.
+ - There are usually hundreds of dependencies and dozens to hundreds of .js files in a given project. Requiring a web browser to load each of these files independently would make page load times very slow. The build step gathers all the dependencies in the bundle so our browser doesn't need to make hundreds of requests to run the app. This dramatically improves page load times.
+ - It's even better if we can remove un-necessary code. Many build tools preform [tree shaking](https://medium.com/@netxm/what-is-tree-shaking-de7c6be5cadd) to eliminate code from dependencies that our app doesn't actually use. The fewer lines of code we ship, the quicker the page will load. 
+ - We use can automated tooling to make sure it's compatible across browsers. 
+ - We can even make the code as sort as possible by renaming variables from things like `userPreferences` to `a`.
+ - The build process can include a [transpliation](https://scotch.io/tutorials/javascript-transpilers-what-they-are-why-we-need-them) step. This enables us to use other languages like TypeScript, CoffeScript, Elm, Jsx, and still produce a JavaScript app for the web.
+   
+
+In a compiled language(Java, C++, Go ect.), the code is compiled into machine code. 
+Machines cannot actually the code itself, they need a very detailed set of step-by-step instructions. 
+The compilation process enables developers to work in an easily maintainable language that is close to what we know and understand.
+The compilation process also checks our code for us, it makes sure that we don't try to subtract 15 from the word "potato" for instance. 
+
+
+Here's an example of Some Java Sourcecode... [source](https://en.wikibooks.org/wiki/Java_Programming/Byte_Code)
+```
+ for (int i = 2; i < 1000; i++) {
+  for (int j = 2; j < i; j++) {
+    if (i % j == 0)
+      continue outer;
+  }
+  System.out.println (i);
+ }
+ 
+ ```
+ ...and it's respective Java ByteCode
+ ```
+  0:   iconst_2
+  1:   istore_1
+  2:   iload_1
+  3:   sipush  1000
+  6:   if_icmpge       44
+  9:   iconst_2
+  10:  istore_2
+  11:  iload_2
+  12:  iload_1
+  13:  if_icmpge       31
+  16:  iload_1
+  17:  iload_2
+  18:  irem             # remainder
+  19:  ifne    25
+  22:  goto    38
+  25:  iinc    2, 1
+  28:  goto    11
+  31:  getstatic       #84; //Field java/lang/System.out:Ljava/io/PrintStream;
+  34:  iload_1
+  35:  invokevirtual   #85; //Method java/io/PrintStream.println:(I)V
+  38:  iinc    1, 1
+  41:  goto    2
+  44:  return   
+```
+
+Regardless of the language, once these steps complete successfully we have an **artifact** that we can run or deploy. In the frontend JS world, we'd have a bundle.js, in Java we'd have .jar file, for C we'd have a .exe. 
 
 ### Cool so what?
 
 ![pipeline-img](build-many-pipeline.png)
 
-Many teams use CI/CD tools such as Concourse, Jenkins, CircleCI, TeamCity to orchestrate their builds and then deploy their software to various environments (dev, acceptance, staging, prod). 
-Using these tools, It's very easy to use a reference to a git commit to refer to a version of your code. 
-When deploying the app, they'll pull the code, run a build, then push the code to an environment. A pipeliene step could look something like this.
+Many teams use CI/CD tools such as Concourse, Jenkins, CircleCI, TeamCity to test their code, orchestrate their builds, and then deploy their software to various environments (dev, acceptance, staging, prod). 
+When you want to deploy a specific version, it's very easy to simply reference a git commit. 
+The tool will pull the code, create an artifact, then push the code to an environment. A super simple deploy step would look something like this;
 
 ```
     cf target -s acceptance
     git check-out ${SHA}
     cd my-project
-    npm run build
+    --env.ENVIRONMENT=acceptance npm run build 
     cf push -p build
 ```
 
 #### What's the problem with this? 
 
-While the build process is hugely important and valubale, it is also very complex. 
+The build process enables us to work in understandable high level languages and automates many optimization steps. It also introduces a lot of complexity and can be a point of failure.  
 There's a lot that goes into it and a lot that can go wrong.
-When a team builds before each push, they're techincally pushing an un-tested artifact. 
-It's as if a chef would serve a bowl of soup before they tasted it because they know the recipe should be good.
-(Maybe leave out? Anyone who has seen MasterChef knows that you **NEVER** serve something if you haven't tasted it).
 
-Does this REALLY matter though? Aren't computers really good at doing the same thing repeatably? Don't we have tools like package.lock's and build.gradles to make sure builds are consistent?
+When a team builds before each deployment as in the example above, the deployed artifact is **un-tested**. 
+It's like a chef serving a bowl of soup before they tasted it because they know the recipe is good.
+
+Does this REALLY matter though? Aren't computers really good at doing the same thing repeatably? Don't we have solutions like npm's `package.lock.json` or gradle's `build.gradle` to make sure builds are consistent?
 
 Builds can always go wrong, and you really don't want your production build to be the one that has a problem.
 
-- No matter what CI tool you're using, you can't guarantee that the environment in which you build is the exact same. 
-(SHOULD I TAKE OUT THIS SHOT AT JENKINS) If you're using Jenkins, there's a good chance you're in a stateful environment that can easily change between pushes to different environments, especially if your team is pushing to master frequently ((maybe should take this out too lol) as the should be)).
+- No matter what CI tool you're using, you can't guarantee that the environment in which you build is the exact same. Many CI tools hold hold state across builds. The build environment is then unpredictable. 
 - Something can just go wrong. There's no such thing as bug-free software. Even compilers and build tools can have issues. They can run out of memory or just get something wrong. Again, you don't want to realize this on your prod push.
-- Teams oven break out their deployments into separate pipelines. The different pipeliens can run with different versions of your build tool causing unexpeted behavior.
+- Dependencies can change can also change between builds. Since the artifact you deploy needs to incorporate its dependencies, you can end up deploying entirely different versions of dependencies!
+    - package.lock.json files do not keep track of absolute versions, but rather minimum versions.
+    - So, you could get newer versions of transitive dependencies baked into your artifact across differend deployments.
+    - Newer versions could have compatibility problems or security issues.
+    - This makes it impossible to get reproducible and consistent builds.
+- Dependencies can also go away over time. [Left Pad](https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/) is an infamous example of what happens when a dependency gets taken down. The maintainers of Left Pad removed the library from NPM. Anyone with Left Pad as a dependency was unable to build!
 
-Versions can also change between builds. Since the artifact you deploy needs to incorporate its libraries, you can end up deploying eitirely different versions of dependencies! 
-You haven't tested your integration with it in dev, your pm's havent make sure it works in acceptance, if you have QA they haven't had the chance to ensure that it hasnt broken.
-Even if you use something like a package.lock.json, it cannot guarantee that every version is lined up. 
-These files do not recursively keep track of the dependencies of every transitive dependency.
-Package.lock.json files also often dont use absolue versions, but use minimum versions. This futher increases the uncertainty of what your app will be built with.
+We use environments for a reason. To de-risk going to the next one. Each acts a shield to the environemtn above it. This is how we can achieve a stable production environment while allowing developers to quickly iterate. If we build on the fly for each environment, we loose much of the shielding provided by lower level environments.
 
-Dependencies can also go away over time. [Left Pad](https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/) is an infamous example of what happens when a dependency gets taken down. If you had build and stored your artifact, you'd be good to go. If this was taken down between a commit being made and a deployment happening, it would be imposible do deploy.
 
 #### What's should we do instead?
 
 ![pipeline-img](build-once-pipeline.jpg)
 
-Build your artifact once.
+Build your artifact once. Version it. Store it in an artifact repository. Promote it across different environments. 
+
+You will have the confidence as you promote the artifact to higher environments. You will know that you're deploing the actual artifact, the exact sequence of 1's and 0's, that you vetted in lower environments. When you push that artifact to production, you know it's the EXACT same thing your PM accepted. It's the EXACT same thing that your tests passed against. It's the EXACT same thing that integrated with other apps and services in staging.
+
+This will force you to follow factor [3 of 12 factor apps](https://12factor.net/config), externalize your environment specific configuration.
+
+You will have the flexibility to deploy your artifact to any environment. You can roll back to older versions on demand.
+
+Deployments will be fast. You don't have to waste time downloading dependencies and building each time.
+
+There is less complexity in you DevOps setup. Fewer reasons for the pipeline to break.
 
 
 
 
-
-
+#
+#
+#
+#
+#
+#
+#
 # Iteration 2 -> Themes
 
 ### Artifact vs Source Code
