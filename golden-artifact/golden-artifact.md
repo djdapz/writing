@@ -35,8 +35,8 @@ For modern frontend JavaScript projects, it's a common practice to build the cod
 
 In a compiled language(Java, C++, Go ect.), the code is compiled into machine code. 
 Machines cannot actually execute the code itself, they need a very detailed set of step-by-step instructions. 
-The compilation process enables developers to work in an easily maintainable language that is close to what we know and understand.
-The compilation process also checks our code for us, it makes sure that we don't try to subtract 15 from the word "potato" for instance. 
+The compilation process enables developers to work in an easily maintainable language that is closer to english and the business problems that they're trying to solve.
+The compilation process also checks our code for us, it makes sure that we don't try to do things like subtract 15 from the word "potato". 
 
 
 Here's an example of Some Java Sourcecode... [source](https://en.wikibooks.org/wiki/Java_Programming/Byte_Code)
