@@ -1,3 +1,3 @@
 # Writing
 
-[Golden Artifact](https://github.com/djdapz/writing/blob/master/golden-artifact.md)
+[Golden Artifact](https://github.com/djdapz/writing/blob/master/golden-artifact/golden-artifact.md)
