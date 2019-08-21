@@ -25,7 +25,7 @@ We gather all of the dependencies that our code relies on (other code that our c
 
 We convert all of the code we need from the **human-readable** code that we write and maintain, and convert it into **machine-readable** code that will actually run on a comptuter. Many compilers or build tools will also have optimiztaion steps built in to make your code as efficient as possible.
 
-For modern frontend JavaScript projects, it's a common practice to build the code into a single file called `bundle.js`, or a series of a few bundle files. Even though the browser can technically interpret our source (sometimes), we get many advantages from the build step.
+For modern frontend JavaScript projects, it's a common practice to build the code into a single file called `bundle.js`, or a series of a few bundle files. Even though the browser can technically interpret our source, we get many advantages from the build step.
  - There are usually hundreds of dependencies and dozens to hundreds of .js files in a given project. Requiring a web browser to load each of these files independently would make page load times very slow. The build step gathers all the dependencies in the bundle so our browser doesn't need to make hundreds of requests to run the app. This dramatically improves page load times.
  - It's even better if we can remove un-necessary code. Many build tools preform [tree shaking](https://medium.com/@netxm/what-is-tree-shaking-de7c6be5cadd) to eliminate code from dependencies that our app doesn't actually use. The fewer lines of code we ship, the quicker the page will load. 
  - We use can automated tooling to make sure it's compatible across browsers. 
