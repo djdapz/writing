@@ -88,9 +88,9 @@ When you want to deploy a specific version, it's very easy to simply reference a
 The tool will pull the code, create an artifact, then push the code to an environment. A super simple deploy step would look something like this;
 
 ```
+    cd my-project
     cf target -s acceptance
     git check-out ${SHA}
-    cd my-project
     --env.ENVIRONMENT=acceptance npm run build 
     cf push -p build
 ```
@@ -98,25 +98,26 @@ The tool will pull the code, create an artifact, then push the code to an enviro
 #### What's the problem with this? 
 
 The build process enables us to work in understandable high level languages and automates many optimization steps. It also introduces a lot of complexity and can be a point of failure.  
+
 There's a lot that goes into it and a lot that can go wrong.
 
 When a team builds before each deployment as in the example above, the deployed artifact is **un-tested**. 
-It's like a chef serving a bowl of soup before they tasted it because they know the recipe is good.
+It's like a chef serving a bowl of soup without tasting it because they know the recipe is good.
 
 Does this REALLY matter though? Aren't computers really good at doing the same thing repeatably? Don't we have solutions like npm's `package.lock.json` or gradle's `build.gradle` to make sure builds are consistent?
 
 Builds can always go wrong, and you really don't want your production build to be the one that has a problem.
 
-- No matter what CI tool you're using, you can't guarantee that the environment in which you build is the exact same. Many CI tools hold hold state across builds. The build environment is then unpredictable. 
-- Something can just go wrong. There's no such thing as bug-free software. Even compilers and build tools can have issues. They can run out of memory or just get something wrong. Again, you don't want to realize this on your prod push.
+- No matter what CI tool you're using, you can't guarantee that the build environment is the exact same. Many CI tools hold hold state across builds.
+- Something can just go wrong. There's no such thing as bug-free software. Even compilers and build tools can have issues. 
 - Dependencies can change can also change between builds. Since the artifact you deploy needs to incorporate its dependencies, you can end up deploying entirely different versions of dependencies!
     - package.lock.json files do not keep track of absolute versions, but rather minimum versions.
-    - So, you could get newer versions of transitive dependencies baked into your artifact across differend deployments.
+    - So, you could get newer versions of transitive dependencies baked into your artifact across different deployments.
     - Newer versions could have compatibility problems or security issues.
     - This makes it impossible to get reproducible and consistent builds.
-- Dependencies can also go away over time. [Left Pad](https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/) is an infamous example of what happens when a dependency gets taken down. The maintainers of Left Pad removed the library from NPM. Anyone with Left Pad as a dependency was unable to build!
+- Dependencies can also go away over time. [Left Pad](https://www.theregister.co.uk/2016/03/23/npm_left_pad_chaos/) is an infamous example of what happens when a dependency gets taken down. The maintainers of Left Pad removed the library from NPM. Anyone with Left Pad as a dependency was unable to build their app, because a required dependency no longer existed.
 
-We use environments for a reason. To de-risk going to the next one. Each acts a shield to the environemtn above it. This is how we can achieve a stable production environment while allowing developers to quickly iterate. If we build on the fly for each environment, we loose much of the shielding provided by lower level environments.
+We use environments for a reason, to de-risk going to the next one. Each acts a shield to the environment above it. This is how we can achieve a stable production environment while allowing developers to quickly iterate. If we build on the fly each time we deploy, we loose much of the shielding provided by lower level environments.
 
 
 #### What's should we do instead?
@@ -134,8 +135,6 @@ You will have the flexibility to deploy your artifact to any environment. You ca
 Deployments will be fast. You don't have to waste time downloading dependencies and building each time.
 
 There is less complexity in you DevOps setup. Fewer reasons for the pipeline to break.
-
-
 
 
 #
